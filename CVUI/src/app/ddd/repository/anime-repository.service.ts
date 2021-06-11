@@ -7,7 +7,9 @@ import { Anime } from '../domain/anime';
 })
 export class AnimeRepositoryService {
 
-  public animes: Anime[] = []
+  private animes: Anime[] = []
+
+  private idMap = new Map<string, Anime>();
 
   constructor() {
     // console.log(rawAnime)
@@ -21,8 +23,14 @@ export class AnimeRepositoryService {
       }
 
       this.animes.push(anime)
+
+      // ssid
     }
 
-    console.log(this.animes)
   }
+
+  public get allAnimes() {
+    return this.animes;
+  }
+
 }
