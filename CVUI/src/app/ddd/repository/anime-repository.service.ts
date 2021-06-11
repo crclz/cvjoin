@@ -14,9 +14,7 @@ export class AnimeRepositoryService {
   constructor() {
     // console.log(rawAnime)
     for (var x of rawAnime) {
-      var anime = new Anime();
-      anime.title = x.title;
-      anime.watchUrl = x.viewUrl;
+      var anime = new Anime(x.title, x.viewUrl);
 
       for (var [character, cv] of x.cv) {
         anime.cvChar.set(cv, character);
@@ -24,13 +22,19 @@ export class AnimeRepositoryService {
 
       this.animes.push(anime)
 
-      // ssid
+      // id
+      this.idMap.set(anime.id, anime)
     }
 
   }
 
   public get allAnimes() {
     return this.animes;
+  }
+
+  public getAnimeById(id: string): Anime | undefined {
+    var anime = this.idMap.get(id)
+    return anime;
   }
 
 }

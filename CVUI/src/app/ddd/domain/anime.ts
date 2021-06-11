@@ -1,7 +1,14 @@
 export class Anime {
-    public title: string = "";
-    public watchUrl: string = "";
+    public id: string;// ss123123
+    public title: string;
+    public watchUrl: string;
     public cvChar: Map<string, string> = new Map<string, string>();
+
+    constructor(title: string, watchUrl: string) {
+        this.id = Anime.getid(watchUrl)
+        this.title = title
+        this.watchUrl = watchUrl
+    }
 
     // https://www.bilibili.com/bangumi/play/ss26801
     public static getid(url: string): string {

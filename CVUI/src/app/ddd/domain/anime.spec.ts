@@ -1,10 +1,10 @@
 import { Anime } from './anime';
 
-describe('Anime', () => {
-  it('should create an instance', () => {
-    expect(new Anime()).toBeTruthy();
-  });
-});
+// describe('Anime', () => {
+//   it('should create an instance', () => {
+//     expect(new Anime()).toBeTruthy();
+//   });
+// });
 
 describe("Anime.getssid", () => {
   it('should get ssid', () => {
