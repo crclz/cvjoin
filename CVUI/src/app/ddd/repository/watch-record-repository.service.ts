@@ -7,9 +7,10 @@ export class WatchRecordRepositoryService {
 
   private collectionName = "watchrecords"
 
-  private watchedIds: Map<string, string> = new Map<string, string>();
+  private watchedIds: any = {};
 
   constructor() {
+    console.log("a", JSON.stringify(this.watchedIds))
     // init collection
     var loaded = this.load();
     if (!loaded) {
@@ -33,7 +34,7 @@ export class WatchRecordRepositoryService {
 
   public getWatchedIds(): string[] {
     var ids: string[] = [];
-    for (let id of this.watchedIds.keys()) {
+    for (let id in this.watchedIds) {
       ids.push(id);
     }
 
@@ -45,7 +46,7 @@ export class WatchRecordRepositoryService {
   }
 
   public setWatched(id: string) {
-    this.watchedIds.set(id, "1");
+    this.watchedIds[id] = 1;
     this.flush();
   }
 
