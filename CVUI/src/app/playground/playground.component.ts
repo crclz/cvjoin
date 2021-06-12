@@ -68,6 +68,9 @@ export class PlaygroundComponent implements OnInit {
   selectAnime(anime: Anime) {
     this.selectedAnime = anime;
     this.appsvc.selectedAnimeId$.next(anime.id);
+
+    this.animeSearchInput = "";
+    this.searchInputChange("");
   }
 
 }
