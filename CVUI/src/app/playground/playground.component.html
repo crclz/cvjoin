@@ -1,7 +1,18 @@
 <p>playground works!</p>
 
-<input [(ngModel)]="selectedIdInput">
-<button (click)="findRelations(selectedIdInput)">Find</button>
+<input [(ngModel)]="animeSearchInput" (ngModelChange)="searchInputChange(animeSearchInput)">
+
+<div>
+    <div *ngFor="let anime of animeSearchResults$ | async">
+        {{anime.title}}
+    </div>
+</div>
+
+<div *ngIf="selectedAnime">
+    已选择： <a [href]="selectedAnime.watchUrl"> {{selectedAnime.title }}</a>
+</div>
+
+<hr>
 
 <div id="relation">
     <div *ngFor="let cvRelation of appsvc.relations$ | async">

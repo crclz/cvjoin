@@ -37,4 +37,9 @@ export class AnimeRepositoryService {
     return anime;
   }
 
+  public findAnimes(word: string): Anime[] {
+    word = word.toLowerCase();
+    return this.animes.filter(p => p.title.toLowerCase().includes(word))
+  }
+
 }

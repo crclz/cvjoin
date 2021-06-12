@@ -1,6 +1,9 @@
 import { stringify } from '@angular/compiler/src/util';
 import { Component, OnInit } from '@angular/core';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { debounceTime, map, shareReplay } from 'rxjs/operators';
 import { MyAppService } from '../ddd/appsvc/my-app.service';
+import { Anime } from '../ddd/domain/anime';
 import { AnimeRepositoryService } from '../ddd/repository/anime-repository.service';
 import { WatchRecordRepositoryService } from '../ddd/repository/watch-record-repository.service';
 
@@ -15,13 +18,36 @@ export class PlaygroundComponent implements OnInit {
     private watchRecordRepository: WatchRecordRepositoryService,
     public appsvc: MyAppService,
     private animeRepository: AnimeRepositoryService,
-  ) { }
+  ) {
+
+    this.animeSearchResults$ = this.animeSearchWord$.pipe(
+      debounceTime(300),
+      map(word => {
+        word = word.trim();
+        if (word == "") {
+          return [];
+        } else {
+          return this.animeRepository.findAnimes(word)
+        }
+
+      },
+        shareReplay(1)
+      )
+    )
+
+  }
 
   importerInput = "";
 
-  selectedIdInput = "";
+  animeSearchInput = "";
+  animeSearchWord$ = new Subject<string>();
+  animeSearchResults$: Observable<Anime[]>;
+
+  selectedAnime: Anime | null = null;
 
   ngOnInit(): void {
+
+
   }
 
   importWatched() {
@@ -44,6 +70,10 @@ export class PlaygroundComponent implements OnInit {
     }
 
     this.appsvc.selectedAnimeId$.next(id)
+  }
+
+  searchInputChange(word: string) {
+    this.animeSearchWord$.next(word)
   }
 
 }
