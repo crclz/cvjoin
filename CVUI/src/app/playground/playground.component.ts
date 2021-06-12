@@ -37,7 +37,6 @@ export class PlaygroundComponent implements OnInit {
 
   }
 
-  importerInput = "";
 
   animeSearchInput = "";
   animeSearchWord$ = new Subject<string>();
@@ -50,17 +49,7 @@ export class PlaygroundComponent implements OnInit {
 
   }
 
-  importWatched() {
-    var r = /(ss\d+)/g
-    var matches = this.importerInput.matchAll(r);
 
-    for (var m of matches) {
-      var id = m[1];
-
-      var ok = this.appsvc.addWatched(id);
-      console.log(`ok: ${ok}, id: ${id}`)
-    }
-  }
 
   findRelations(id: string) {
     var anime = this.animeRepository.getAnimeById(id);
