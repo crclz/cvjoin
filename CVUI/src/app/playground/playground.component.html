@@ -4,7 +4,7 @@
 
 <div>
     <div *ngFor="let anime of animeSearchResults$ | async">
-        {{anime.title}}
+        {{anime.title}} <a href="javascript:" (click)="selectAnime(anime)">选择</a>
     </div>
 </div>
 
