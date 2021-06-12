@@ -12,7 +12,7 @@
 </div>
 
 <div *ngIf="selectedAnime">
-    已选择作品： <a [href]="selectedAnime.watchUrl"> {{selectedAnime.title }}</a>
+    已选择作品： <a target="_blank" [href]="selectedAnime.watchUrl"> {{selectedAnime.title }}</a>
 </div>
 
 
@@ -23,7 +23,7 @@
 
         <ul class="relation-list">
             <li *ngFor="let r of cvRelation.relations" class="relation-item">
-                {{r.character}} in <a [href]="r.animePlayUrl">{{r.animeTitle }}</a>
+                {{r.character}} in <a target="_blank" [href]="r.animePlayUrl">{{r.animeTitle }}</a>
             </li>
         </ul>
     </div>
