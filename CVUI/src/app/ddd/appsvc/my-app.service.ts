@@ -87,6 +87,7 @@ export class MyAppService {
           throw 'shit'
         }
         var relation = new RelationInfo(anime.id, anime.title, character);
+        r.push(relation)
       }
     })
 
@@ -101,7 +102,8 @@ export class MyAppService {
       throw 'shit2'
     }
 
-    anime.cvChar.forEach((cvname, character) => {
+    // 反人类的 value: kay
+    anime.cvChar.forEach((character, cvname) => {
       var relationInfos = this.findCvInAnimes(cvname, targetAnimes);
       var relation = new CvRelation(cvname, character, relationInfos);
 

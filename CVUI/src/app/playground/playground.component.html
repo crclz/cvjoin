@@ -1,4 +1,21 @@
 <p>playground works!</p>
+
+<input [(ngModel)]="selectedIdInput">
+<button (click)="findRelations(selectedIdInput)">Find</button>
+
+<div id="relation">
+    <div *ngFor="let cvRelation of appsvc.relations$ | async">
+        <hr>
+        <div> 角色：{{cvRelation.character}} ；CV: {{cvRelation.cvname}}. 关联： {{cvRelation.relations.length}} </div>
+
+        <div class="relation-list">
+            <div *ngFor="let r of cvRelation.relations" class="relation-item">
+                {{r.character}} in <a [href]="r.animePlayUrl">{{r.animeTitle }}</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 <textarea [(ngModel)]="importerInput" rows="20" style="width: 30%;"></textarea>
 
 <button (click)="importWatched()">导入</button>
