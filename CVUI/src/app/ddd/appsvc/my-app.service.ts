@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { Anime } from '../domain/anime';
 import { AnimeRepositoryService } from '../repository/anime-repository.service';
@@ -11,8 +11,10 @@ import { WatchRecordRepositoryService } from '../repository/watch-record-reposit
 export class MyAppService {
 
   private refreshWatched$ = new BehaviorSubject<number>(0);
+  public selectedAnimeId$: Subject<string> = new Subject<string>();
 
   public watchedAnime$: Observable<Anime[]>;
+  public relations$: Observable<CvRelation[]>;
 
   constructor(
     private animeRepository: AnimeRepositoryService,
@@ -20,6 +22,11 @@ export class MyAppService {
   ) {
     this.watchedAnime$ = this.refreshWatched$.pipe(
       map(() => this.getWatched()),
+      shareReplay(1)
+    );
+
+    this.relations$ = combineLatest([this.watchedAnime$, this.selectedAnimeId$]).pipe(
+      map(([animes, id]) => this.buildCvRelation(id, animes)),
       shareReplay(1)
     );
   }
@@ -64,4 +71,65 @@ export class MyAppService {
     return this.animeRepository.allAnimes;
   }
 
+  private findCvInAnimes(cvname: string, animes: Anime[]): RelationInfo[] {
+    var r: RelationInfo[] = [];
+
+    animes.forEach(anime => {
+      if (anime.cvChar.has(cvname)) {
+        var character = anime.cvChar.get(cvname);
+        if (character == null) {
+          throw 'shit'
+        }
+        var relation = new RelationInfo(anime.id, anime.title, character);
+      }
+    })
+
+    return r;
+  }
+
+  private buildCvRelation(animeId: string, targetAnimes: Anime[]): CvRelation[] {
+    var relations: CvRelation[] = [];
+
+    var anime = this.animeRepository.getAnimeById(animeId);
+    if (anime == null) {
+      throw 'shit2'
+    }
+
+    anime.cvChar.forEach((cvname, character) => {
+      var relationInfos = this.findCvInAnimes(cvname, targetAnimes);
+      var relation = new CvRelation(cvname, character, relationInfos);
+
+      relations.push(relation);
+    })
+
+    return relations;
+  }
+}
+
+export class CvRelation {
+  public cvname: string;
+  public character: string;
+  public relations: RelationInfo[];
+
+  constructor(cvname: string, character: string, relations: RelationInfo[]) {
+    this.cvname = cvname;
+    this.character = character;
+    this.relations = relations;
+  }
+}
+
+export class RelationInfo {
+  public animeId: string;
+  public animeTitle: string;
+  public animePlayUrl: string;
+  public character: string;
+
+
+  constructor(animeId: string, animeTitle: string, character: string) {
+    this.animeId = animeId;
+    this.animeTitle = animeTitle;
+    this.character = character;
+
+    this.animePlayUrl = `https://www.bilibili.com/bangumi/play/${animeId}`;
+  }
 }
