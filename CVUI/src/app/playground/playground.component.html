@@ -1,0 +1,30 @@
+<h1>查询关联</h1>
+
+<label>搜索：</label>
+<input [(ngModel)]="animeSearchInput" (ngModelChange)="searchInputChange(animeSearchInput)">
+
+<hr>
+
+<div>
+    <div *ngFor="let anime of animeSearchResults$ | async">
+        {{anime.title}} <a href="javascript:" (click)="selectAnime(anime)">选择</a>
+    </div>
+</div>
+
+<div *ngIf="selectedAnime">
+    已选择作品： <a [href]="selectedAnime.watchUrl"> {{selectedAnime.title }}</a>
+</div>
+
+
+<div id="relation">
+    <div *ngFor="let cvRelation of appsvc.relations$ | async">
+        <hr>
+        <div> 角色：{{cvRelation.character}} ；CV: {{cvRelation.cvname}}. 关联： {{cvRelation.relations.length}} </div>
+
+        <ul class="relation-list">
+            <li *ngFor="let r of cvRelation.relations" class="relation-item">
+                {{r.character}} in <a [href]="r.animePlayUrl">{{r.animeTitle }}</a>
+            </li>
+        </ul>
+    </div>
+</div>

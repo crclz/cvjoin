@@ -1,0 +1,33 @@
+<h1>已看作品管理</h1>
+
+<h2>导入</h2>
+<textarea [(ngModel)]="importerInput" rows="20" style="width: 60%;"></textarea>
+
+<div>
+    <button (click)="importWatched()">导入</button>
+</div>
+
+
+<p>
+    {{message}}
+</p>
+
+
+<div *ngIf="(appsvc.watchedAnime$ | async) as watchedAnimes">
+    <h2>已看作品列表（{{watchedAnimes.length}}）</h2>
+
+    <div id="watchedList">
+        <div *ngFor="let anime of watchedAnimes">
+            <a class="line" href="javascript:" (click)="appsvc.removeWatch(anime.id)">移除</a>
+            <a [href]="anime.watchUrl" target="_blank"> {{anime.title}} </a>
+        </div>
+
+    </div>
+
+</div>
+
+<style>
+    .line {
+        margin-right: .5rem;
+    }
+</style>
