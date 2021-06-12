@@ -20,6 +20,12 @@ export class MyAppService {
     private animeRepository: AnimeRepositoryService,
     private watchRecordRepository: WatchRecordRepositoryService,
   ) {
+    // at startup, do cleaning
+    this.removeInvalidWatched();
+
+    // clean state. TODO: remove this in prod
+    // this.removeAllWatched();
+
     this.watchedAnime$ = this.refreshWatched$.pipe(
       map(() => this.getWatched()),
       shareReplay(1)
@@ -103,6 +109,26 @@ export class MyAppService {
     })
 
     return relations;
+  }
+
+  // Clean from watched where id not exist in AllAnimes
+  private removeInvalidWatched() {
+    var watchedIds = this.watchRecordRepository.getWatchedIds();
+    watchedIds.forEach(id => {
+      var anime = this.animeRepository.getAnimeById(id);
+      if (anime == null) {
+        this.watchRecordRepository.removeWatch(id);
+      }
+    })
+  }
+
+  public removeAllWatched() {
+    var watchedIds = this.watchRecordRepository.getWatchedIds();
+    watchedIds.forEach(id => {
+      this.watchRecordRepository.removeWatch(id);
+    })
+
+    this.refreshWatched$.next(0);
   }
 }
 

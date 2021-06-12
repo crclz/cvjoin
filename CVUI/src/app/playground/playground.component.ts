@@ -1,5 +1,6 @@
 import { stringify } from '@angular/compiler/src/util';
 import { Component, OnInit } from '@angular/core';
+import { MyAppService } from '../ddd/appsvc/my-app.service';
 import { WatchRecordRepositoryService } from '../ddd/repository/watch-record-repository.service';
 
 @Component({
@@ -10,49 +11,25 @@ import { WatchRecordRepositoryService } from '../ddd/repository/watch-record-rep
 export class PlaygroundComponent implements OnInit {
 
   constructor(
-    private watchRecordRepository: WatchRecordRepositoryService
+    private watchRecordRepository: WatchRecordRepositoryService,
+    public appsvc: MyAppService,
   ) { }
 
+  importerInput = "";
+
   ngOnInit(): void {
-    this.saveWatched()
   }
 
-  saveWatched() {
-    var watched = `
-https://www.bilibili.com/bangumi/play/ss2667/
-https://www.bilibili.com/bangumi/play/ss1057/
-https://www.bilibili.com/bangumi/play/ss34230/
-https://www.bilibili.com/bangumi/play/ss6446/
-https://www.bilibili.com/bangumi/play/ss34715/
-https://www.bilibili.com/bangumi/play/ss24572/
-https://www.bilibili.com/bangumi/play/ss2580/
-https://www.bilibili.com/bangumi/play/ss963/
-https://www.bilibili.com/bangumi/play/ss5798/
-https://www.bilibili.com/bangumi/play/ss36429/
-https://www.bilibili.com/bangumi/play/ss25733/
-https://www.bilibili.com/bangumi/play/ss2660/
-https://www.bilibili.com/bangumi/play/ss5800/
-https://www.bilibili.com/bangumi/play/ss1672/
-https://www.bilibili.com/bangumi/play/ss29590/
-    `
+  importWatched() {
+    var r = /(ss\d+)/g
+    var matches = this.importerInput.matchAll(r);
 
-    var r = /bangumi\/play\/(ss[\d]+)/g
+    for (var m of matches) {
+      var id = m[1];
 
-    var ids: string[] = []
-
-    var matches = watched.matchAll(r);
-
-    for (let m of matches) {
-      ids.push(m[1]);
+      var ok = this.appsvc.addWatched(id);
+      console.log(`ok: ${ok}, id: ${id}`)
     }
-
-    console.log(ids);
-
-    ids.forEach(p => {
-      this.watchRecordRepository.setWatched(p)
-
-    })
-
   }
 
 }

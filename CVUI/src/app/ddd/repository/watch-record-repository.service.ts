@@ -51,7 +51,7 @@ export class WatchRecordRepositoryService {
   }
 
   public removeWatch(id: string) {
-    this.watchedIds.delete(id);
+    delete this.watchedIds[id];
     this.flush();
   }
 }

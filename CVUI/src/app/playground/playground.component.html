@@ -1,1 +1,11 @@
 <p>playground works!</p>
+<textarea [(ngModel)]="importerInput" rows="20" style="width: 30%;"></textarea>
+
+<button (click)="importWatched()">导入</button>
+
+<div id="watchedList">
+    <div *ngFor="let anime of appsvc.watchedAnime$ | async">
+        <a [href]="anime.watchUrl" target="_blank"> {{anime.title}} </a>
+    </div>
+
+</div>
