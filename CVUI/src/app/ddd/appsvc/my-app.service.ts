@@ -95,6 +95,10 @@ export class MyAppService {
   }
 
   private buildCvRelation(animeId: string, targetAnimes: Anime[]): CvRelation[] {
+
+    // exclude target anime
+    targetAnimes = targetAnimes.filter(p => p.id != animeId);
+
     var relations: CvRelation[] = [];
 
     var anime = this.animeRepository.getAnimeById(animeId);
