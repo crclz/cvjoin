@@ -2,7 +2,10 @@
 
 **1-all-anime-list.json** *git:yes*
 
-这个文件包含所有番剧的**播放链接**和**标题**。
+这个文件包含所有番剧的：
+- 播放链接
+- 标题
+- MediaID（用于查询声优列表）
 
 播放链接的例子：https://www.bilibili.com/bangumi/play/ss26801
 
